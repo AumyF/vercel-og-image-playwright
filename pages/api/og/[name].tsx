@@ -64,7 +64,9 @@ const handler: NextApiHandler = async (req, res) => {
 
     const image = await page.screenshot({ type: "png" });
 
-    res.setHeader(`Content-Type`, "image/png");
+    res
+      .setHeader(`Content-Type`, "image/png")
+      .setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate");
     res.end(image);
   } catch (error) {
     console.error(error);
