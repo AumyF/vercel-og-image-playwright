@@ -4,20 +4,15 @@ import ReactDOMServer from "react-dom/server";
 import { ChromiumBrowser } from "playwright";
 
 const style = `
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
   body {
-    font-family: "Noto Sans Japanese", serif;
+    font-family: "Noto Sans JP", serif;
   }
 `;
 
 const Content: React.VFC<{ screenName: string }> = ({ screenName }) => (
   <html>
     <head>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap"
-        rel="stylesheet"
-      />
       <style dangerouslySetInnerHTML={{ __html: style }}></style>
     </head>
     <body>
