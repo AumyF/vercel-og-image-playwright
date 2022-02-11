@@ -13,10 +13,14 @@ const style = `
 const Content: React.VFC<{ screenName: string }> = ({ screenName }) => (
   <html>
     <head>
-      <style dangerouslySetInnerHTML={{ __html: style }}></style>
+      <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
+      <style dangerouslySetInnerHTML={{ __html: style }} />
     </head>
     <body>
       <h1>{screenName}</h1>
+      <p>
+        社会の各個人及び各機関が、この世界人権宣言を常に念頭に置きながら、加盟国自身の人民の間にも、また、加盟国の管轄下にある地域の人民の間にも、これらの権利と自由との尊重を指導及び教育によって促進すること並びにそれらの普遍的措置によって確保することに努力するように、すべての人民とすべての国とが達成すべき共通の基準として、この人権宣言を公布する。{" "}
+      </p>
     </body>
   </html>
 );
@@ -56,7 +60,7 @@ const handler: NextApiHandler = async (req, res) => {
 
     const html = constructHtmlString(username);
 
-    await page.setContent(html, { waitUntil: "domcontentloaded" });
+    await page.setContent(html, { waitUntil: "networkidle" });
 
     const image = await page.screenshot({ type: "png" });
 
