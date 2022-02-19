@@ -34,16 +34,10 @@ const constructHtmlString = (displayName: string) => {
   return html;
 };
 
-const handler: NextApiHandler = async (req, res) => {
-  const [username] = [req.query.name].flat();
-
-  if (username === undefined) {
-    res.status(404).end(`user not found`);
-    return;
-  }
-
-  const viewport = { width: 1200, height: 630 };
-
+const generateImage = async (
+  viewport: { width: number; height: number },
+  username: string
+): Promise<{ type: "ok"; image: Buffer } | { type: "err"; error: unknown }> => {
   let browser: ChromiumBrowser | undefined;
   try {
     if (process.env.NODE_ENV === "production") {
@@ -64,16 +58,37 @@ const handler: NextApiHandler = async (req, res) => {
 
     const image = await page.screenshot({ type: "png" });
 
-    res
-      .setHeader(`Content-Type`, "image/png")
-      .setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate");
-    res.end(image);
+    return { type: "ok", image };
   } catch (error) {
-    console.error(error);
-    res.end("Failed to generate og-image");
+    return { type: "err", error };
   } finally {
     await browser?.close();
   }
+};
+
+const handler: NextApiHandler = async (req, res) => {
+  const [username] = [req.query.name].flat();
+
+  if (username === undefined) {
+    res.status(404).end(`user not found`);
+    return;
+  }
+
+  const viewport = { width: 1200, height: 630 };
+
+  const genrationResult = await generateImage(viewport, username);
+
+  if (genrationResult.type === "err") {
+    console.error(genrationResult.error);
+    res.status(500).end(`Failed to generate og-image.`);
+    return;
+  }
+
+  const image = genrationResult.image;
+  res
+    .setHeader(`Content-Type`, "image/png")
+    .setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate")
+    .end(image);
 };
 
 export default handler;
