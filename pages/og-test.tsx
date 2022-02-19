@@ -5,6 +5,7 @@ const OGTest: NextPage = () => {
   return (
     <div>
       <Head>
+        <title>OG Image Test Chang</title>
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:image:src"
