@@ -5,7 +5,10 @@ const OGTest: NextPage = () => {
   return (
     <div>
       <Head>
-        <meta name="og:title" content="Vercel Next.js OG Image Test Chang" />
+        <meta
+          name="og:title"
+          content="Vercel Next.js OG Image Test Chang (@aumy_f)"
+        />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:image:src"
